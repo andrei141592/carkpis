@@ -2,7 +2,7 @@ package ro.andonie.carkpis.packages;
 
 import java.sql.*;
 
-public class handledb {
+public class handleDb {
     private static String dbName = "dbcarkpis";
 
     public static void createdb() {
@@ -16,7 +16,7 @@ public class handledb {
                             + "id INTEGER PRIMARY KEY, "
                             + "date TEXT, "
                             + "kms INTEGER, "
-                            + "price REAL, "
+                            + "cost REAL, "
                             + "amount REAL, "
                             + "category1 TEXT, "
                             + "category2 TEXT, "
@@ -53,7 +53,7 @@ public class handledb {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
             statement.executeUpdate(
-                    "INSERT INTO transactions (date, kms, price, amount, category1, category2, details) VALUES ("
+                    "INSERT INTO transactions (date, kms, cost, amount, category1, category2, details) VALUES ("
                             + "'" + date + "', "
                             + kms + ", "
                             + price + ", "
@@ -86,6 +86,7 @@ public class handledb {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM transactions");
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
+            System.out.println();
             for (int i = 1; i <= columnCount; i++) {
                 System.out.print(metaData.getColumnName(i) + " ");
             }
@@ -102,4 +103,5 @@ public class handledb {
             closeResources(statement, connection);
         }
     }
+
 }
