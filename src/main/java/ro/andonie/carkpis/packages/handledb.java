@@ -1,8 +1,12 @@
 package ro.andonie.carkpis.packages;
 
 import java.sql.*;
+import java.util.Scanner;
 
-public class handleDb {
+public class HandleDb {
+
+    private static String userInputBuffer = "";
+
     private static String dbName = "dbcarkpis";
 
     public static void createdb() {
@@ -70,10 +74,12 @@ public class handleDb {
 
     private static void closeResources(Statement statement, Connection connection) {
         try {
-            statement.close();
-            connection.close();
+            if (statement != null)
+                statement.close();
+            if (connection != null)
+                connection.close();
         } catch (Exception e) {
-            System.err.println("exception in closing the db: " + e.getMessage());
+            System.err.println("Exception in closing the db: {}" + e.getMessage());
         }
     }
 
@@ -87,21 +93,65 @@ public class handleDb {
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             System.out.println();
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.print(metaData.getColumnName(i) + " ");
-            }
-            System.out.println();
-            while (resultSet.next()) {
-                for (int i = 1; i <= columnCount; i++) {
-                    System.out.print(resultSet.getString(i) + " ");
-                }
-                System.out.println();
-            }
+
+            TableDisplay.printTable(columnCount, resultSet, metaData);
+
         } catch (Exception e) {
-            System.err.println("ShowDataBase: " + e.getMessage());
+            System.err.println("ShowDataBase: {}" + e.getMessage());
         } finally {
             closeResources(statement, connection);
         }
     }
 
+    public static String ShowLastXLines(Scanner scanner) {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
+            statement = connection.createStatement();
+            System.out.print("Enter the number of lines to show: ");
+
+            userInputBuffer = HandleUserInput.inputValidation(scanner, "int");
+            if (userInputBuffer == "back" || userInputBuffer == "exit")
+                return userInputBuffer;
+            int lines = Integer.parseInt(userInputBuffer);
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM transactions ORDER BY id DESC LIMIT " + lines);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            TableDisplay.printTable(columnCount, resultSet, metaData);
+
+        } catch (Exception e) {
+            System.err.println("ShowLastXLines: {}" + e.getMessage());
+        } finally {
+            closeResources(statement, connection);
+        }
+        return "exit";
+    }
+
+    public static String deleteLine(Scanner scanner) {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
+            statement = connection.createStatement();
+            System.out.print("Enter the id of the line to delete: ");
+            userInputBuffer = HandleUserInput.inputValidation(scanner, "int");
+            if (userInputBuffer == "back" || userInputBuffer == "exit")
+                return userInputBuffer;
+            int id = Integer.parseInt(userInputBuffer);
+
+            ResultSet resultSet = statement.executeQuery("SELECT id FROM transactions WHERE id = " + id);
+            if (!resultSet.next()) {
+                System.out.println("\u001B[31mNo record found with id: \u001B[0m" + id);
+                return "back";
+            }
+            statement.executeUpdate("DELETE FROM transactions WHERE id = " + id);
+        } catch (Exception e) {
+            System.err.println("deleteLine: {}" + e.getMessage());
+        } finally {
+            closeResources(statement, connection);
+        }
+        return "exit";
+    }
 }

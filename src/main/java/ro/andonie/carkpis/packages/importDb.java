@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class importDb {
+public class ImportDb {
     public static void fromDrivvo() {
         String filePath = "Drivvo.csv";
         String line;
@@ -46,8 +46,10 @@ public class importDb {
                 if ("Gasoline".equals(lineElements[2])) {
                     lineElements[1] = lineElements[1].substring(0, lineElements[1].length() - 9);
 
-                    handleDb.addNewTransaction(lineElements[1], Integer.parseInt(lineElements[0]),
-                            Float.parseFloat(lineElements[4]), Float.parseFloat(lineElements[5]), "Fuel", "Refueling",
+                    HandleDb.addNewTransaction(lineElements[1],
+                            Integer.parseInt(lineElements[0]),
+                            Float.parseFloat(lineElements[4]), Float.parseFloat(lineElements[5]), "Fuel",
+                            "Refueling",
                             "Refueling");
                     // System.out.println("line added in db");
                 }

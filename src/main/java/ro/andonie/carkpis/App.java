@@ -10,15 +10,15 @@ public class App {
         // importDb.fromDrivvo();
 
         // handleDb.createdb();
-        String loopFeedback = "";
+        String userInputBuffer = "";
         Scanner scanner = new Scanner(System.in);
         int loop = 0;
-        while (loop < 10 && loopFeedback != "exit") {
+        while (loop < 10 && userInputBuffer != "exit") {
             System.out.print("\n\u001B[34m\u001B[1m========== CarKPIs ==========\u001B[0m\n");
             System.out.print("\"exit\" to close the program\n \n");
             System.out.print("Options:\n");
             System.out.print("1 - Add a refueling log\n");
-            System.out.print("2 - Show DataBase\n");
+            System.out.print("2 - Manage database\n");
             System.out.print("Selected option: ");
             String userInput = "";
             try {
@@ -28,8 +28,10 @@ public class App {
             }
 
             switch (userInput) {
-                case "1" -> loopFeedback = handleUserInput.AddRefueling(scanner);
-                case "2" -> handleDb.ShowDataBase();
+                case "1" -> userInputBuffer = HandleUserInput.addRefueling(scanner);
+                case "2" -> userInputBuffer = HandleUserInput.manageDb(scanner);
+                case "3" -> HandleDb.ShowLastXLines(scanner);
+                case "4" -> userInputBuffer = HandleDb.deleteLine(scanner);
                 case "exit" -> loop = 10;
                 default -> System.out.println("\u001B[31mInvalid option selected.\u001B[0m \nTry again.\n");
             }
