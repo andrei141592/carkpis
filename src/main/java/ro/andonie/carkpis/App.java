@@ -6,14 +6,12 @@ import ro.andonie.carkpis.packages.*;
 public class App {
 
     public static void main(String[] args) {
-
-        // importDb.fromDrivvo();
-
-        // handleDb.createdb();
-        String userInputBuffer = "";
         Scanner scanner = new Scanner(System.in);
+
+        String userInputBuffer = "";
+
         int loop = 0;
-        while (loop < 10 && userInputBuffer != "exit") {
+        while (Initialize.checkDb(scanner) && loop < 10 && userInputBuffer != "exit") {
             System.out.print("\n\u001B[34m\u001B[1m========== CarKPIs ==========\u001B[0m\n");
             System.out.print("\"exit\" to close the program\n \n");
             System.out.print("Options:\n");
@@ -33,7 +31,7 @@ public class App {
                 case "3" -> HandleDb.ShowLastXLines(scanner);
                 case "4" -> userInputBuffer = HandleDb.deleteLine(scanner);
                 case "exit" -> loop = 10;
-                default -> System.out.println("\u001B[31mInvalid option selected.\u001B[0m \nTry again.\n");
+                default -> System.out.println("\u001B[31mInvalid option selected.\u001B[0m\nTry again.\n");
             }
             loop++;
         }

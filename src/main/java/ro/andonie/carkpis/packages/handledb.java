@@ -9,13 +9,13 @@ public class HandleDb {
 
     private static String dbName = "dbcarkpis";
 
-    public static void createdb() {
+    public static boolean createDb() {
         Connection connection = null;
         Statement statement = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
-            statement.executeQuery(
+            statement.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS transactions ("
                             + "id INTEGER PRIMARY KEY, "
                             + "date TEXT, "
@@ -25,9 +25,11 @@ public class HandleDb {
                             + "category1 TEXT, "
                             + "category2 TEXT, "
                             + "details TEXT)");
-
+            System.out.println("Database created successfully.");
+            return true;
         } catch (Exception e) {
-            System.err.println("createdb: " + e.getMessage());
+            System.out.println("Database creation failed." + e);
+            return false;
         } finally {
             closeResources(statement, connection);
 

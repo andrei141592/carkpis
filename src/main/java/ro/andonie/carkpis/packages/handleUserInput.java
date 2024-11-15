@@ -127,6 +127,13 @@ public class HandleUserInput {
                         System.out.print("\u001B[31mInvalid input.\u001B[0m \nPlease enter a valid number: ");
                         continue;
                     }
+                case "y/n":
+                    if (userInput.equals("y") || userInput.equals("n")) {
+                        return userInput;
+                    } else {
+                        System.out.print("\u001B[31mInvalid input.\u001B[0m \nPlease enter \"y\" or \"n\": ");
+                        continue;
+                    }
 
                 default:
                     return "exit";
@@ -139,5 +146,26 @@ public class HandleUserInput {
         }
         return "exit";
 
+    }
+
+    public static boolean checkIfNewDb(Scanner scanner, String checkDbResult) {
+        userInputBuffer = "";
+        System.out.print("\n\u001B[34m\u001B[1m========== CarKPIs ==========\u001B[0m\n");
+        System.out.print("\"exit\" to close the program\n \n");
+
+        if (checkDbResult.equals("no-db")) {
+            System.out.println(
+                    "The needed database file \"dbcarkpis.db\" can't be found in the same folder at the program.");
+        } else if (checkDbResult.equals("missing-tables") || checkDbResult.equals("db-error")) {
+            System.out.println("The needed database file \"dbcarkpis.db\" it can not be processed.");
+        }
+
+        System.out.print("Do you want to create a new database? (\"y\"/\"n\"): ");
+
+        userInputBuffer = inputValidation(scanner, "y/n");
+        if ("y".equals(userInputBuffer)) {
+            return HandleDb.createDb();
+        }
+        return false;
     }
 }
