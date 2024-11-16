@@ -4,6 +4,7 @@
 
 ##Refuelling
 "Odometer (km)","Date","Fuel","Price / L","Total cost","Volume","Filled tank completely","Second fuel","Price / L","Total cost","Volume","Filled tank completely 2","Third fuel","Price / L","Total cost","Volume","Filled tank completely 3","Fuel efficiency","Gas station","Driver","Payment method","Reason","Notes"
+"218234","2024-11-15 08:45:50","Gasoline","7.20","313.70","43.57","Yes","","0.00","0.00","0.00","No","","0.00","0.00","0.00","No","8,16 L/100km","Rompetrol","andrei petru","","",""
 "217700","2024-11-03 08:55:20","Gasoline","7.15","295.30","41.30","Yes","","0.00","0.00","0.00","No","","0.00","0.00","0.00","No","5,74 L/100km","Rompetrol","andrei petru","","",""
 "216980","2024-11-03 08:54:45","Gasoline","7.17","295.26","41.18","Yes","","0.00","0.00","0.00","No","","0.00","0.00","0.00","No","10,43 L/100km","Rompetrol","andrei petru","","",""
 "216585","2024-11-03 08:53:04","Gasoline","7.20","196.13","27.24","Yes","","0.00","0.00","0.00","No","","0.00","0.00","0.00","No","6,63 L/100km","Mol - Vitesco Card","andrei petru","","",""

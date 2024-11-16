@@ -16,15 +16,14 @@ public class HandleDb {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
             statement.executeUpdate(
-                    "CREATE TABLE IF NOT EXISTS transactions ("
+                    "CREATE TABLE IF NOT EXISTS fuel_transactions ("
                             + "id INTEGER PRIMARY KEY, "
                             + "date TEXT, "
                             + "kms INTEGER, "
                             + "cost REAL, "
                             + "amount REAL, "
-                            + "category1 TEXT, "
-                            + "category2 TEXT, "
-                            + "details TEXT)");
+                            + "details TEXT, "
+                            + "average_consumption REAL)");
             System.out.println("Database created successfully.");
             return true;
         } catch (Exception e) {
@@ -42,7 +41,7 @@ public class HandleDb {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM transactions");
+            statement.executeUpdate("DELETE FROM fuel_transactions");
         } catch (Exception e) {
             System.err.println("clearTable: " + e.getMessage());
         } finally {
@@ -50,23 +49,34 @@ public class HandleDb {
         }
     }
 
-    public static void addNewTransaction(String date, int kms, float price, float amount, String category1,
-            String category2,
-            String details) {
+    public static void addNewTransaction(String date, int kms, float price, float amount, String details) {
         Connection connection = null;
         Statement statement = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS rowcount FROM fuel_transactions");
+            resultSet.next();
+            int count = resultSet.getInt("rowcount");
+            float averageConsumption = 0;
+            if (count >= 2) {
+                ResultSet lastTransaction = statement
+                        .executeQuery("SELECT * FROM fuel_transactions ORDER BY id DESC LIMIT 1");
+                if (lastTransaction.next()) {
+                    int lastKms = lastTransaction.getInt("kms");
+                    averageConsumption = (amount / (kms - lastKms)) * 100;
+
+                }
+            }
             statement.executeUpdate(
-                    "INSERT INTO transactions (date, kms, cost, amount, category1, category2, details) VALUES ("
+                    "INSERT INTO fuel_transactions (date, kms, cost, amount, details, average_consumption) VALUES ("
                             + "'" + date + "', "
                             + kms + ", "
                             + price + ", "
                             + amount + ", "
-                            + "'" + category1 + "', "
-                            + "'" + category2 + "', "
-                            + "'" + details + "')");
+                            + "'" + details + "', "
+                            + averageConsumption + ")");
         } catch (Exception e) {
             System.err.println("addNewTransaction: " + e.getMessage());
         } finally {
@@ -91,7 +101,7 @@ public class HandleDb {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM transactions");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM fuel_transactions");
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             System.out.println();
@@ -118,7 +128,8 @@ public class HandleDb {
                 return userInputBuffer;
             int lines = Integer.parseInt(userInputBuffer);
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM transactions ORDER BY id DESC LIMIT " + lines);
+            ResultSet resultSet = statement
+                    .executeQuery("SELECT * FROM fuel_transactions ORDER BY id DESC LIMIT " + lines);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             TableDisplay.printTable(columnCount, resultSet, metaData);
@@ -128,7 +139,7 @@ public class HandleDb {
         } finally {
             closeResources(statement, connection);
         }
-        return "exit";
+        return "ok";
     }
 
     public static String deleteLine(Scanner scanner) {
@@ -143,17 +154,18 @@ public class HandleDb {
                 return userInputBuffer;
             int id = Integer.parseInt(userInputBuffer);
 
-            ResultSet resultSet = statement.executeQuery("SELECT id FROM transactions WHERE id = " + id);
+            ResultSet resultSet = statement.executeQuery("SELECT id FROM fuel_transactions WHERE id = " + id);
             if (!resultSet.next()) {
                 System.out.println("\u001B[31mNo record found with id: \u001B[0m" + id);
                 return "back";
             }
-            statement.executeUpdate("DELETE FROM transactions WHERE id = " + id);
+            statement.executeUpdate("DELETE FROM fuel_transactions WHERE id = " + id);
         } catch (Exception e) {
             System.err.println("deleteLine: {}" + e.getMessage());
         } finally {
             closeResources(statement, connection);
         }
-        return "exit";
+        return "ok";
     }
+
 }

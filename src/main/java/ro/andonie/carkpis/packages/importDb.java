@@ -48,9 +48,7 @@ public class ImportDb {
 
                     HandleDb.addNewTransaction(lineElements[1],
                             Integer.parseInt(lineElements[0]),
-                            Float.parseFloat(lineElements[4]), Float.parseFloat(lineElements[5]), "Fuel",
-                            "Refueling",
-                            "Refueling");
+                            Float.parseFloat(lineElements[4]), Float.parseFloat(lineElements[5]), "import from drivvo");
                     // System.out.println("line added in db");
                 }
 

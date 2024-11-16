@@ -37,8 +37,13 @@ public class HandleUserInput {
                 return userInputBuffer;
             float amount = Float.parseFloat(userInputBuffer);
 
-            HandleDb.addNewTransaction(date, kms, cost, amount, "Fuel", "Refueling",
-                    "Refueling");
+            System.out.print("Enter the details (optional): ");
+            userInputBuffer = inputValidation(scanner, "text");
+            if (userInputBuffer == "back" || userInputBuffer == "exit")
+                return userInputBuffer;
+            String details = userInputBuffer;
+
+            HandleDb.addNewTransaction(date, kms, cost, amount, details);
             System.out.println("Refueling recorded: Date: " + date + ", Amount: " + amount + " liters, Cost: " + cost);
             loop++;
         }
@@ -136,7 +141,7 @@ public class HandleUserInput {
                     }
 
                 default:
-                    return "exit";
+                    return "ok";
             }
 
         }

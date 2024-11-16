@@ -15,7 +15,7 @@ public class Initialize {
                     boolean transactionsTable = false;
                     while (rs.next()) {
                         String tableName = rs.getString("TABLE_NAME");
-                        if (tableName.equalsIgnoreCase("transactions")) {
+                        if (tableName.equalsIgnoreCase("fuel_transactions")) {
                             transactionsTable = true;
                         }
                     }

@@ -6,6 +6,7 @@ import ro.andonie.carkpis.packages.*;
 public class App {
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
         String userInputBuffer = "";
