@@ -60,12 +60,13 @@ public class HandleDb {
             resultSet.next();
             int count = resultSet.getInt("rowcount");
             float averageConsumption = 0;
-            if (count >= 2) {
+            if (count >= 1) {
                 ResultSet lastTransaction = statement
                         .executeQuery("SELECT * FROM fuel_transactions ORDER BY id DESC LIMIT 1");
                 if (lastTransaction.next()) {
                     int lastKms = lastTransaction.getInt("kms");
                     averageConsumption = (amount / (kms - lastKms)) * 100;
+                    averageConsumption = Math.round(averageConsumption * 100.0f) / 100.0f;
 
                 }
             }

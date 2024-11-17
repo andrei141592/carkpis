@@ -139,6 +139,8 @@ public class HandleUserInput {
                         System.out.print("\u001B[31mInvalid input.\u001B[0m \nPlease enter \"y\" or \"n\": ");
                         continue;
                     }
+                case "text":
+                    return userInput;
 
                 default:
                     return "ok";
