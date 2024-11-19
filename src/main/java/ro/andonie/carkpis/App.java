@@ -18,6 +18,7 @@ public class App {
             System.out.print("Options:\n");
             System.out.print("1 - Add a refueling log\n");
             System.out.print("2 - Manage database\n");
+            System.out.print("3 - Show Key Performance Indicators\n");
             System.out.print("Selected option: ");
             String userInput = "";
             try {
@@ -29,8 +30,8 @@ public class App {
             switch (userInput) {
                 case "1" -> userInputBuffer = HandleUserInput.addRefueling(scanner);
                 case "2" -> userInputBuffer = HandleUserInput.manageDb(scanner);
-                case "3" -> HandleDb.ShowLastXLines(scanner);
-                case "4" -> userInputBuffer = HandleDb.deleteLine(scanner);
+                case "3" -> userInputBuffer = HandleUserInput.overallConsumtion();
+
                 case "exit" -> loop = 10;
                 default -> System.out.println("\u001B[31mInvalid option selected.\u001B[0m\nTry again.\n");
             }

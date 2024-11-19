@@ -1,5 +1,9 @@
 package ro.andonie.carkpis.packages;
 
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.Scanner;
 
 public class HandleUserInput {
@@ -175,4 +179,43 @@ public class HandleUserInput {
         }
         return false;
     }
+
+    public static String overallConsumtion(){
+        Connection connection = null;
+        Statement statement = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:sqlite:dbcarkpis.db");
+            statement = connection.createStatement();
+            String queryTotal = "SELECT SUM(amount) AS totalAmount FROM fuel_transactions";
+            ResultSet resultSetTotal = statement.executeQuery(queryTotal);
+            float totalAmount = 0;
+            if (resultSetTotal.next()) {
+                totalAmount = resultSetTotal.getFloat("totalAmount");
+            }
+
+            String queryFirstAmount = "SELECT amount FROM fuel_transactions ORDER BY kms ASC LIMIT 1";
+            ResultSet resultSetFirstAmount = statement.executeQuery(queryFirstAmount);
+            if (resultSetFirstAmount.next()) {
+                float firstAmount = resultSetFirstAmount.getFloat("amount");
+                totalAmount -= firstAmount;
+            }
+
+            System.out.println("Total amount of fuel (excluding the first entry): " + totalAmount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "done";
+            
+        }
+
+        
+    
 }
