@@ -187,6 +187,9 @@ public class HandleUserInput {
         try{
             connection = DriverManager.getConnection("jdbc:sqlite:dbcarkpis.db");
             statement = connection.createStatement();
+
+            //get the toal amount of fuel
+
             String queryTotal = "SELECT SUM(amount) AS totalAmount FROM fuel_transactions";
             ResultSet resultSetTotal = statement.executeQuery(queryTotal);
             float totalAmount = 0;
@@ -201,7 +204,17 @@ public class HandleUserInput {
                 totalAmount -= firstAmount;
             }
 
-            System.out.println("Total amount of fuel (excluding the first entry): " + totalAmount);
+            //get the totla number of km
+            String queryTotalKm = "SELECT MAX(kms) - MIN(kms) AS totalKm FROM fuel_transactions";
+            ResultSet resultSetTotalKm = statement.executeQuery(queryTotalKm);
+            int totalKm = 0;
+            if (resultSetTotalKm.next()) {
+                totalKm = resultSetTotalKm.getInt("totalKm");
+            }
+
+            float overallAverageConsumtion = totalAmount / totalKm * 100;
+
+            System.out.println("The overall average consumtion is:  " + overallAverageConsumtion);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
