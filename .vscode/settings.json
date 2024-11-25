@@ -1,3 +1,6 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "prettier.trailingComma": "es5",
+  "prettier.requirePragma": true,
+  "prettier.useEditorConfig": false,
 }

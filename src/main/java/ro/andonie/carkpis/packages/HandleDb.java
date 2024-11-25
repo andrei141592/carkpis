@@ -56,28 +56,13 @@ public class HandleDb {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
             statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS rowcount FROM fuel_transactions");
-            resultSet.next();
-            int count = resultSet.getInt("rowcount");
-            float averageConsumption = 0;
-            if (count >= 1) {
-                ResultSet lastTransaction = statement
-                        .executeQuery("SELECT * FROM fuel_transactions ORDER BY id DESC LIMIT 1");
-                if (lastTransaction.next()) {
-                    int lastKms = lastTransaction.getInt("kms");
-                    averageConsumption = (amount / (kms - lastKms)) * 100;
-                    averageConsumption = Math.round(averageConsumption * 100.0f) / 100.0f;
-
-                }
-            }
             statement.executeUpdate(
-                    "INSERT INTO fuel_transactions (date, kms, cost, amount, details, average_consumption) VALUES ("
+                    "INSERT INTO fuel_transactions (date, kms, cost, amount, details) VALUES ("
                             + "'" + date + "', "
                             + kms + ", "
                             + price + ", "
                             + amount + ", "
-                            + "'" + details + "', "
-                            + averageConsumption + ")");
+                            + "'" + details + "')");
         } catch (Exception e) {
             System.err.println("addNewTransaction: " + e.getMessage());
         } finally {
@@ -169,4 +154,15 @@ public class HandleDb {
         return "ok";
     }
 
+    // WIP! a sepparate method for updating the average_consumtion after each data
+    // base update
+    public static void averageConsumtionAfterEachRefill() {
+        Connection connection = null;
+        Statement statement = null;
+        try { // com
+
+        } catch (Exception e) {
+            System.err.println("ShowLastXLines: {}" + e.getMessage());
+        }
+    }
 }
